@@ -1,6 +1,8 @@
-# thief
+# thief: a tool to steal your containers resources
 
 Thief is a tool allowing to execute processes into a container cgroups instead of the actual ones, stealing its allowed resources.
+
+This project has been made for ludic purposes only and is not expected to be used for another way than that. It manipulates your processes cgroups directly.
 
 ## Usage
 
