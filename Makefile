@@ -3,7 +3,7 @@ IMAGE ?= thief
 all: build
 
 build:
-	GOOS=linux GOARCH=amd64 go build -o bin/thief
+	GOOS=linux GOARCH=amd64 go build -o bin/thief ./cmd/
 
 docker: build
 	docker build -t ${IMAGE} .

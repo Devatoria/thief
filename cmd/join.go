@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -9,15 +9,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Join command
-var Join = &cobra.Command{
+var joinCmd = &cobra.Command{
 	Use:     "join <container ID>",
 	Short:   "joins the given container cgroups",
 	Example: "thief --runtime containerd --socket /run/containerd/containerd.sock join --cpu abcdef123456",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// get flags and args
-		sysfsPath, _ := cmd.Flags().GetString("sysfs-path")
 		runtime, _ := cmd.Flags().GetString("runtime")
 		socket, _ := cmd.Flags().GetString("socket")
 		cpu, _ := cmd.Flags().GetBool("cpu")
@@ -43,9 +41,13 @@ var Join = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// join cgroup
-		driver := cgroup.NewDriver(sysfsPath, path, cpu)
-		if err := driver.Join(); err != nil {
+		cgroups := []cgroup.Kind{}
+		if cpu {
+			cgroups = append(cgroups, cgroup.CPU)
+		}
+
+		// join cgroups
+		if err := driver.Join(path, cgroups); err != nil {
 			fmt.Printf("error joining cgroup: %v\n", err)
 			os.Exit(1)
 		}
@@ -55,5 +57,5 @@ var Join = &cobra.Command{
 }
 
 func init() {
-	Join.Flags().Bool("cpu", false, "join cpu cgroup")
+	joinCmd.Flags().Bool("cpu", false, "join cpu cgroup")
 }
