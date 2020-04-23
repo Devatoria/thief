@@ -9,6 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	cpu bool
+)
+
 var joinCmd = &cobra.Command{
 	Use:     "join <container ID>",
 	Short:   "joins the given container cgroups",
@@ -16,9 +20,6 @@ var joinCmd = &cobra.Command{
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// get flags and args
-		runtime, _ := cmd.Flags().GetString("runtime")
-		socket, _ := cmd.Flags().GetString("socket")
-		cpu, _ := cmd.Flags().GetBool("cpu")
 		id := args[0]
 
 		// check cgroup flags
@@ -57,5 +58,5 @@ var joinCmd = &cobra.Command{
 }
 
 func init() {
-	joinCmd.Flags().Bool("cpu", false, "join cpu cgroup")
+	joinCmd.Flags().BoolVar(&cpu, "cpu", false, "join cpu cgroup")
 }

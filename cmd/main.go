@@ -10,6 +10,8 @@ import (
 
 var (
 	sysfsPath string
+	runtime   string
+	socket    string
 	driver    cgroup.Driver
 )
 
@@ -19,11 +21,11 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	cobra.OnInitialize(initDriver)
+	cobra.OnInitialize(initDriver, checkRuntime)
 
 	rootCmd.PersistentFlags().StringVar(&sysfsPath, "sysfs-path", "/sys/fs/cgroup", "cgroup path if not the usual one (for instance when mounted)")
-	rootCmd.PersistentFlags().String("runtime", "containerd", "container runtime (docker or containerd)")
-	rootCmd.PersistentFlags().String("socket", "/run/containerd/containerd.sock", "docker or containerd daemon socket path")
+	rootCmd.PersistentFlags().StringVar(&runtime, "runtime", "containerd", "container runtime (docker or containerd)")
+	rootCmd.PersistentFlags().StringVar(&socket, "socket", "", "docker or containerd daemon socket path (defaults /run/containerd/containerd.sock (containerd) or /var/run/docker.sock (docker))")
 }
 
 func initDriver() {
@@ -32,6 +34,22 @@ func initDriver() {
 	}
 
 	driver = cgroup.NewDriver(driverCfg)
+}
+
+func checkRuntime() {
+	switch runtime {
+	case "containerd":
+		if socket == "" {
+			socket = "/run/containerd/containerd.sock"
+		}
+	case "docker":
+		if socket == "" {
+			socket = "/var/run/docker.sock"
+		}
+	default:
+		fmt.Printf("Unexpected runtime %s, expecting either docker or containerd\n", runtime)
+		os.Exit(1)
+	}
 }
 
 func main() {
