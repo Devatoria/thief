@@ -11,8 +11,10 @@ const (
 	procs = "cgroup.procs"
 )
 
+// Driver is a cgroup driver to join or execute
+// into a given container's cgroup
 type Driver interface {
-	Enter() error
+	Join() error
 }
 
 type cgroup struct {
@@ -21,6 +23,7 @@ type cgroup struct {
 	cpu   bool
 }
 
+// NewDriver returns a cgroup driver from the given configuration
 func NewDriver(sysfs, path string, cpu bool) Driver {
 	return cgroup{
 		sysfs: sysfs,
@@ -29,7 +32,9 @@ func NewDriver(sysfs, path string, cpu bool) Driver {
 	}
 }
 
-func (c cgroup) Enter() error {
+// Join adds the thief process parent's pid to the
+// container's cgroup
+func (c cgroup) Join() error {
 	// get parent pid
 	ppid := os.Getppid()
 

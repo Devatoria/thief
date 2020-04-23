@@ -9,11 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Enter command
-var Enter = &cobra.Command{
-	Use:     "enter <container ID>",
-	Short:   "enters the given container cgroups",
-	Example: "thief --runtime containerd --socket /run/containerd/containerd.sock enter --cpu abcdef123456",
+// Join command
+var Join = &cobra.Command{
+	Use:     "join <container ID>",
+	Short:   "joins the given container cgroups",
+	Example: "thief --runtime containerd --socket /run/containerd/containerd.sock join --cpu abcdef123456",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// get flags and args
@@ -43,17 +43,17 @@ var Enter = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// enter cgroup
+		// join cgroup
 		driver := cgroup.NewDriver(sysfsPath, path, cpu)
-		if err := driver.Enter(); err != nil {
-			fmt.Printf("error entering cgroup: %v\n", err)
+		if err := driver.Join(); err != nil {
+			fmt.Printf("error joining cgroup: %v\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("successfully entered %s container cgroups at path %s\n", id, path)
+		fmt.Printf("successfully joined %s container cgroups at path %s\n", id, path)
 	},
 }
 
 func init() {
-	Enter.Flags().Bool("cpu", false, "join cpu cgroup")
+	Join.Flags().Bool("cpu", false, "join cpu cgroup")
 }

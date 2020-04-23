@@ -23,7 +23,8 @@ func init() {
 }
 
 func main() {
-	rootCmd.AddCommand(cmd.Enter)
+	rootCmd.AddCommand(cmd.Join)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
