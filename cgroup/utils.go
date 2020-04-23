@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// getCgroupPath parses the given pid cgroup file and
+// returns the path of the given cgroup
 func getCgroupPath(pid int, kind Kind) (string, error) {
 	entries, err := parseCgroupFile(pid)
 	if err != nil {
@@ -23,6 +25,9 @@ func getCgroupPath(pid int, kind Kind) (string, error) {
 	return entry, nil
 }
 
+// parseCgroupFile reads the cgroup file for the given pid
+// and builds a map kind => path like:
+// cpu => /kubepods/besteffort/pod7180b...
 func parseCgroupFile(pid int) (map[string]string, error) {
 	entries := map[string]string{}
 
