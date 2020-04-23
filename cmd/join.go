@@ -23,21 +23,21 @@ var joinCmd = &cobra.Command{
 
 		// check cgroup flags
 		if !cpu {
-			fmt.Println("no cgroup to join, please specify at least one cgroup to join")
+			fmt.Println("No cgroup to join, please specify at least one cgroup to join")
 			os.Exit(1)
 		}
 
 		// create container
 		c, err := container.New(runtime, socket, id)
 		if err != nil {
-			fmt.Printf("error creating container socket: %v\n", err)
+			fmt.Printf("Error creating container socket: %v\n", err)
 			os.Exit(1)
 		}
 
 		// retrieve cgroup path
 		path, err := c.CgroupPath()
 		if err != nil {
-			fmt.Printf("error getting container cgroup path: %v\n", err)
+			fmt.Printf("Error getting container cgroup path: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -48,11 +48,11 @@ var joinCmd = &cobra.Command{
 
 		// join cgroups
 		if err := driver.Join(path, cgroups); err != nil {
-			fmt.Printf("error joining cgroup: %v\n", err)
+			fmt.Printf("Error joining cgroup: %v\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("successfully joined %s container cgroups at path %s\n", id, path)
+		fmt.Printf("Successfully joined %s container cgroups\n", id)
 	},
 }
 
