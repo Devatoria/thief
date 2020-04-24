@@ -5,14 +5,19 @@ import (
 	"os"
 
 	"github.com/Devatoria/thief/cgroup"
+	"github.com/Devatoria/thief/container"
 	"github.com/spf13/cobra"
 )
 
 var (
+	// flags
 	sysfsPath string
 	runtime   string
 	socket    string
-	driver    cgroup.Driver
+
+	// shared
+	driver   cgroup.Driver
+	cRuntime container.Runtime
 )
 
 var rootCmd = &cobra.Command{
@@ -37,12 +42,13 @@ func initDriver() {
 }
 
 func checkRuntime() {
-	switch runtime {
-	case "containerd":
+	cRuntime = container.Runtime(runtime)
+	switch cRuntime {
+	case container.ContainerdRuntime:
 		if socket == "" {
 			socket = "/run/containerd/containerd.sock"
 		}
-	case "docker":
+	case container.DockerRuntime:
 		if socket == "" {
 			socket = "/var/run/docker.sock"
 		}

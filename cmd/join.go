@@ -29,7 +29,7 @@ var joinCmd = &cobra.Command{
 		}
 
 		// create container
-		c, err := container.New(runtime, socket, id)
+		c, err := container.New(cRuntime, socket, id)
 		if err != nil {
 			fmt.Printf("Error creating container socket: %v\n", err)
 			os.Exit(1)

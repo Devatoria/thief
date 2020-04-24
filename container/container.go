@@ -13,16 +13,16 @@ type container struct {
 	socket string
 }
 
-func New(runtime, socket, id string) (Container, error) {
+func New(runtime Runtime, socket, id string) (Container, error) {
 	c := container{
 		id:     id,
 		socket: socket,
 	}
 
 	switch runtime {
-	case "containerd":
+	case ContainerdRuntime:
 		return &containerd{c}, nil
-	case "docker":
+	case DockerRuntime:
 		return &docker{c}, nil
 	default:
 		return nil, fmt.Errorf("unexpected runtime: %s", runtime)
