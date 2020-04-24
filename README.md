@@ -84,10 +84,15 @@ Exited successfully!
 
 ## TODOs
 
+### Commands
+
 - [x] Join command to attach the current process to a cgroup
 - [x] Exit command to re-attach the current process to the main cgroup
 - [ ] Run command to run a command in a cgroup
 - [ ] Attach command to attach an existing process to a cgroup
+
+### Other
+
 - [ ] Tests
 - [ ] CI
 - [ ] Releases
