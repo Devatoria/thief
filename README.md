@@ -4,6 +4,39 @@ Thief is a tool allowing to execute processes into a container cgroups instead o
 
 This project has been made for ludic purposes only and is not expected to be used for another way than that. It manipulates your processes cgroups directly.
 
+## Example
+
+A quick example running the `sysbench` tool on CPU. First shot is from one container with no 1 CPU, second shot is from a container cgroup having only 0.5 CPU.
+
+```
+/# sysbench cpu run
+CPU speed:
+    events per second:  1135.99
+
+General statistics:
+    total time:                          10.0012s
+    total number of events:              11363
+
+Threads fairness:
+    events (avg/stddev):           11363.0000/0.00
+    execution time (avg/stddev):   9.8310/0.00
+
+/# thief --sysfs-path /mnt/cgroup --runtime docker join --cpu 48b8916a8d82
+Successfully joined 48b8916a8d82 container cgroups
+
+/# sysbench cpu run
+CPU speed:
+    events per second:   516.93
+
+General statistics:
+    total time:                          10.0074s
+    total number of events:              5174
+
+Threads fairness:
+    events (avg/stddev):           5174.0000/0.00
+    execution time (avg/stddev):   9.8624/0.00
+```
+
 ## Usage
 
 ### Global flags
