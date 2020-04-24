@@ -4,13 +4,22 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Devatoria/thief/cgroup"
+	"github.com/Devatoria/thief/cmd/utils"
 	"github.com/Devatoria/thief/container"
 	"github.com/spf13/cobra"
 )
 
 var (
-	cpu bool
+	blkio     bool
+	cpu       bool
+	cpuset    bool
+	devices   bool
+	freezer   bool
+	hugetlb   bool
+	memory    bool
+	net       bool
+	perfevent bool
+	pids      bool
 )
 
 var joinCmd = &cobra.Command{
@@ -42,10 +51,8 @@ var joinCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		cgroups := []cgroup.Kind{}
-		if cpu {
-			cgroups = append(cgroups, cgroup.CPU)
-		}
+		// build enabled cgroups list
+		cgroups := utils.AppendCgroups(blkio, cpu, cpuset, devices, freezer, hugetlb, memory, net, perfevent, pids)
 
 		// join cgroups
 		if err := driver.Join(path, cgroups); err != nil {
@@ -58,5 +65,14 @@ var joinCmd = &cobra.Command{
 }
 
 func init() {
-	joinCmd.Flags().BoolVar(&cpu, "cpu", false, "join cpu cgroup")
+	joinCmd.Flags().BoolVar(&blkio, "blkio", false, "blkio cgroup")
+	joinCmd.Flags().BoolVar(&cpu, "cpu", false, "cpu cgroup")
+	joinCmd.Flags().BoolVar(&cpuset, "cpuset", false, "cpuset cgroup")
+	joinCmd.Flags().BoolVar(&devices, "devices", false, "devices cgroup")
+	joinCmd.Flags().BoolVar(&freezer, "freezer", false, "freezer cgroup")
+	joinCmd.Flags().BoolVar(&hugetlb, "hugetlb", false, "hugetlb cgroup")
+	joinCmd.Flags().BoolVar(&memory, "memory", false, "memory cgroup")
+	joinCmd.Flags().BoolVar(&net, "net", false, "net cgroup")
+	joinCmd.Flags().BoolVar(&perfevent, "perfevent", false, "perfevent cgroup")
+	joinCmd.Flags().BoolVar(&pids, "pids", false, "pids cgroup")
 }
