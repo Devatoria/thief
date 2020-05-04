@@ -21,10 +21,7 @@ Threads fairness:
     events (avg/stddev):           11363.0000/0.00
     execution time (avg/stddev):   9.8310/0.00
 
-/# thief --sysfs-path /mnt/cgroup --runtime docker join --cpu 48b8916a8d82
-Successfully joined 48b8916a8d82 container cgroups
-
-/# sysbench cpu run
+/# thief --sysfs-path /mnt/cgroup --runtime docker run --cpu 48b8916a8d82 sysbench cpu run
 CPU speed:
     events per second:   516.93
 
@@ -73,6 +70,13 @@ The `exit` subcommand re-attaches the current process to the same cgroups as the
 ~# thief exit
 
 Exited successfully!
+```
+
+### Run a bash shell in a container CPU cgroup from the host
+
+```
+~# thief run --cpu 2c9eac1a0147e449208872330685c575933ddd2148888e8cdab899bbb7c14287 bash
+~# 
 ```
 
 ## Notes
