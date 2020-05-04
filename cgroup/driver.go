@@ -14,6 +14,7 @@ import (
 type Driver interface {
 	Join(path string, cgroups []Kind) error
 	Run(path string, cgroups []Kind, command string, args []string) error
+	Attach(path string, cgroups []Kind, pid int) error
 	Exit() error
 }
 
@@ -113,6 +114,11 @@ func (d driver) Run(path string, cgroups []Kind, command string, args []string) 
 	}
 
 	return nil
+}
+
+// Attach attaches the given PID to the given cgroups
+func (d driver) Attach(path string, cgroups []Kind, pid int) error {
+	return d.join(d.sysfs, path, cgroups, pid)
 }
 
 // Exit re-adds the thief process parent's pid to the

@@ -9,7 +9,7 @@ import (
 )
 
 var runCmd = &cobra.Command{
-	Use:     "run <container ID>",
+	Use:     "run <container ID> <command [args...]>",
 	Short:   "runs the given command in the given container cgroups",
 	Example: "thief --runtime containerd --socket /run/containerd/containerd.sock run --cpu abcdef123456 sysbench cpu run",
 	Args:    cobra.MinimumNArgs(2),

@@ -84,6 +84,7 @@ func checkRuntime() {
 func main() {
 	rootCmd.AddCommand(joinCmd)
 	rootCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(attachCmd)
 	rootCmd.AddCommand(exitCmd)
 
 	if err := rootCmd.Execute(); err != nil {

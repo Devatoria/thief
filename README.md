@@ -79,6 +79,13 @@ Exited successfully!
 ~# 
 ```
 
+### Attach a running process to a container CPU cgroup
+
+```
+~# thief attach --cpu 662c9eac1a0147e449208872330685c575933ddd2148888e8cdab899bbb7c14287 6
+Successfully attached PID 666 to 62c9eac1a0147e449208872330685c575933ddd2148888e8cdab899bbb7c14287 container cgroups
+```
+
 ## Notes
 
 * You need to execute `thief` as root to be able to manipulate cgroups
@@ -93,7 +100,7 @@ Exited successfully!
 - [x] Join command to attach the current process to a cgroup
 - [x] Exit command to re-attach the current process to the main cgroup
 - [x] Run command to run a command in a cgroup
-- [ ] Attach command to attach an existing process to a cgroup
+- [x] Attach command to attach an existing process to a cgroup
 
 ### Other
 
