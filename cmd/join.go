@@ -4,22 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Devatoria/thief/cmd/utils"
 	"github.com/Devatoria/thief/container"
 	"github.com/spf13/cobra"
-)
-
-var (
-	blkio     bool
-	cpu       bool
-	cpuset    bool
-	devices   bool
-	freezer   bool
-	hugetlb   bool
-	memory    bool
-	net       bool
-	perfevent bool
-	pids      bool
 )
 
 var joinCmd = &cobra.Command{
@@ -27,15 +13,10 @@ var joinCmd = &cobra.Command{
 	Short:   "joins the given container cgroups",
 	Example: "thief --runtime containerd --socket /run/containerd/containerd.sock join --cpu abcdef123456",
 	Args:    cobra.ExactArgs(1),
+	PreRun:  initCgroups,
 	Run: func(cmd *cobra.Command, args []string) {
-		// get flags and args
+		// get args
 		id := args[0]
-
-		// check cgroup flags
-		if !cpu {
-			fmt.Println("No cgroup to join, please specify at least one cgroup to join")
-			os.Exit(1)
-		}
 
 		// create container
 		c, err := container.New(cRuntime, socket, id)
@@ -50,9 +31,6 @@ var joinCmd = &cobra.Command{
 			fmt.Printf("Error getting container cgroup path: %v\n", err)
 			os.Exit(1)
 		}
-
-		// build enabled cgroups list
-		cgroups := utils.AppendCgroups(blkio, cpu, cpuset, devices, freezer, hugetlb, memory, net, perfevent, pids)
 
 		// join cgroups
 		if err := driver.Join(path, cgroups); err != nil {

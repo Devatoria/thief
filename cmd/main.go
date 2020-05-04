@@ -10,14 +10,27 @@ import (
 )
 
 var (
-	// flags
+	// global flags
 	sysfsPath string
 	runtime   string
 	socket    string
 
+	// shared flags
+	blkio     bool
+	cpu       bool
+	cpuset    bool
+	devices   bool
+	freezer   bool
+	hugetlb   bool
+	memory    bool
+	net       bool
+	perfevent bool
+	pids      bool
+
 	// shared
 	driver   cgroup.Driver
 	cRuntime container.Runtime
+	cgroups  []cgroup.Kind
 )
 
 var rootCmd = &cobra.Command{
@@ -41,6 +54,16 @@ func initDriver() {
 	driver = cgroup.NewDriver(driverCfg)
 }
 
+// initCgorups builds enabled cgroups list and
+// ensures at least one has been enabled
+func initCgroups(cmd *cobra.Command, args []string) {
+	cgroups = cgroup.AppendCgroups(blkio, cpu, cpuset, devices, freezer, hugetlb, memory, net, perfevent, pids)
+	if len(cgroups) == 0 {
+		fmt.Println("No cgroup given, please specify at least one cgroup")
+		os.Exit(1)
+	}
+}
+
 func checkRuntime() {
 	cRuntime = container.Runtime(runtime)
 	switch cRuntime {
@@ -60,6 +83,7 @@ func checkRuntime() {
 
 func main() {
 	rootCmd.AddCommand(joinCmd)
+	rootCmd.AddCommand(runCmd)
 	rootCmd.AddCommand(exitCmd)
 
 	if err := rootCmd.Execute(); err != nil {

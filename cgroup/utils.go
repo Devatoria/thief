@@ -61,3 +61,41 @@ func parseCgroupFile(pid int) (map[string]string, error) {
 
 	return entries, nil
 }
+
+// AppendCgroups creates a slice of the enabled cgroups
+func AppendCgroups(blkio, cpu, cpuset, devices, freezer, hugetlb, memory, net, perfevent, pids bool) []Kind {
+	kinds := []Kind{}
+
+	if blkio {
+		kinds = append(kinds, Blkio)
+	}
+	if cpu {
+		kinds = append(kinds, CPU)
+	}
+	if cpuset {
+		kinds = append(kinds, CPUSet)
+	}
+	if devices {
+		kinds = append(kinds, Devices)
+	}
+	if freezer {
+		kinds = append(kinds, Freezer)
+	}
+	if hugetlb {
+		kinds = append(kinds, HugeTLB)
+	}
+	if memory {
+		kinds = append(kinds, Memory)
+	}
+	if net {
+		kinds = append(kinds, Net)
+	}
+	if perfevent {
+		kinds = append(kinds, PerfEvent)
+	}
+	if pids {
+		kinds = append(kinds, PIDs)
+	}
+
+	return kinds
+}
